@@ -7,8 +7,20 @@ const ReadOnlyRow = ({
   contact,
   handleDelete,
 }) => {
-  console.log("contact", contact.id);
-  console.log("button", buttonPopup);
+  const [isOpen, setIsOpen] = useState(false);
+  // each contact needs a unique true of false value to determine if it is toggled on or off
+
+  //created a  function to close the popup and call the delete function
+  const closePopupAndDelete = (e) => {
+    e.preventDefault();
+    handleDelete(e);
+    setIsOpen(false);
+  };
+  // create a function to close the popup and call the update function
+  const closePopupAndUpdate = (e) => {
+    e.preventDefault();
+    setIsOpen(!isOpen);
+  };
   return (
     <>
       {/* <table> */}
@@ -18,20 +30,22 @@ const ReadOnlyRow = ({
         <td>{contact.phoneNumber}</td>
         <td>{contact.email}</td>
         <td>
-          <button type="button" onClick={() => setbuttonPopup(!buttonPopup)}>
+          {/*  This is setting the state to determine if the value is true or false for opening  */}
+          <button type="button" onClick={() => setIsOpen(!isOpen)}>
             Delete
           </button>
         </td>
       </tr>
       {/* </table> */}
-      <Popup trigger={buttonPopup}>
-        <h2>Are you sure you want to delete this manager?</h2>
-        <p>
-          <button id={contact.id} onClick={handleDelete}>
-            Yes
-          </button>
-        </p>
-      </Popup>
+      {/* this isOpen compares if it's  truth value, and if is true it load the Popup  */}
+      {/* Create props that allow the id and handlClick  to handle what being mapped out  */}
+      {isOpen && (
+        <Popup
+          id={contact.id}
+          onClose={(e) => closePopupAndUpdate(e)}
+          handleClick={(e) => closePopupAndDelete(e)}
+        />
+      )}
     </>
   );
 };

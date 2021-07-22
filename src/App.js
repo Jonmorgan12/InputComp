@@ -38,18 +38,15 @@ const App = () => {
     setContacts(newContacts);
   };
 
-  const handleDelete = (event, contactId) => {
+  const handleDelete = (event) => {
+    // prevent default action of the event
     event.preventDefault();
-    console.log("evtn", event.target.id);
-    const newContacts = [...contacts];
-    console.log("this is my new contacts", newContacts);
-    let index = newContacts.findIndex(
-      (contact) => contact.id === event.target.id
-    );
-    const filteredContacts = newContacts.splice(index, 1);
-    console.log("filteredContacts", filteredContacts);
-    setContacts(filteredContacts);
-    setbuttonPopup(false);
+    // remove the contact from the array by id
+    const newContacts = contacts.filter((contact) => {
+      return contact.id !== parseInt(event.target.id);
+    });
+    // once we recieve a new array allow the changes to propagate
+    setContacts(newContacts);
   };
 
   return (
